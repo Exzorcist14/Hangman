@@ -28,7 +28,7 @@ func NewSession(console interfaces.Console) Session {
 	}
 }
 
-// Play запускает игровой сессии.
+// Play запускает игровую сессию.
 func (s *Session) Play(
 	ws words.Words,
 	dfs conditions.Difficulties,
@@ -56,7 +56,7 @@ func (s *Session) Play(
 	return nil
 }
 
-// configure конфигурирует игровую сессию для начала на основе выбора пользователем категории и уровня сложности.
+// configure конфигурирует игровую сессию на основе выбора пользователем категории и уровня сложности.
 func (s *Session) configure(
 	ws words.Words,
 	dfs conditions.Difficulties,
@@ -89,7 +89,7 @@ func (s *Session) configure(
 	return nil
 }
 
-// Play запускает проигрование раунда.
+// Play запускает проигрывание раунда.
 func (s *Session) playRound() error {
 	frame := s.storyBoard["process"][s.maxAttmeps-s.attempts]
 
