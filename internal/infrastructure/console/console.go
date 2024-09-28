@@ -3,13 +3,13 @@ package console
 import (
 	"bufio"
 	"fmt"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 	"os"
 	"strings"
 	"time"
 	"unicode"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 )
 
 const (
