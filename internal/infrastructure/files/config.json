@@ -1,0 +1,10 @@
+{
+    "difficulties": {
+        "лёгкая": 7,
+        "средняя": 5,
+        "трудная": 3
+    },
+    "randomSelectionCommand": "",
+    "framesInAnimation": 4,
+    "msFrameDelay": 1250
+}

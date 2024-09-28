@@ -14,8 +14,8 @@ type Answer struct {
 	table      map[rune][]int
 }
 
-// NewAnswer создаёт новый Answer с приведённым в нижний регистр словом.
-func NewAnswer(wd words.WordData, category, difficulty string) Answer {
+// New создаёт новый Answer с приведённым в нижний регистр словом.
+func New(wd words.WordData, category, difficulty string) Answer {
 	wd.Word = strings.ToLower(wd.Word)
 
 	return Answer{

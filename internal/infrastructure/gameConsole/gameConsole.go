@@ -1,4 +1,4 @@
-package console
+package gameConsole
 
 import (
 	"bufio"
@@ -9,7 +9,22 @@ import (
 	"unicode"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions/categories"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
+)
+
+const (
+	letterInputMessage       = "Введите букву (? для подсказки): "
+	border                   = "----------------------------------------------------------------------------------------"
+	hintForm                 = "Подсказка: %s"
+	categoryForm             = "Категория: %s"
+	difficultyForm           = "Уровень сложности: %s"
+	attemptsForm             = "Доступно попыток: %v"
+	categoryInputMessage     = "Выберите категорию (пропустите для случайного выбора):"
+	invalidCategoryMessage   = "Категории не существует. Пожалуйста, выберите одну из представленных категорий"
+	difficultyInputMessage   = "Выберите уровень сложности (пропустите для случайного выбора):"
+	invalidDifficultyMessage = "Уровня сложности не существует. Пожалуйста, выберите один из представленных уровней сложности"
+	lettersUsedMessage       = "Использованные буквы:"
 )
 
 // GameConsole реализует игровую консоль, с которой взаимодействует пользователь.
@@ -18,7 +33,7 @@ type GameConsole struct {
 	writer bufio.Writer
 }
 
-func NewGameConsole() *GameConsole {
+func New() *GameConsole {
 	return &GameConsole{
 		reader: *bufio.NewReader(os.Stdin),
 		writer: *bufio.NewWriter(os.Stdout),
@@ -27,7 +42,7 @@ func NewGameConsole() *GameConsole {
 
 // ChooseConditions возвращает категорию и уровня сложности.
 func (gc *GameConsole) ChooseConditions(
-	cts conditions.Categories,
+	cts categories.Categories,
 	dfs conditions.Difficulties,
 	randomSelectionCommand string,
 ) (category, difficulty string, err error) {
@@ -49,7 +64,7 @@ func (gc *GameConsole) Enter() (rune, error) {
 	var lineRemainder string
 
 	for {
-		gc.print("Введите букву (? для подсказки): ", 0)
+		gc.print(letterInputMessage, 0)
 
 		r, _, err := gc.reader.ReadRune()
 		if err != nil {
@@ -71,29 +86,29 @@ func (gc *GameConsole) Enter() (rune, error) {
 
 // DisplayHint выводит передаваемую подсказку.
 func (gc *GameConsole) DisplayHint(hint string) {
-	gc.printf(1, "Подсказка: %s", hint)
+	gc.printf(1, hintForm, hint)
 }
 
 // DisplaySessionStatus выводит статус сессии.
 func (gc *GameConsole) DisplaySessionStatus(
 	category, difficulty string,
-	fr frames.Frame,
+	fr frame.Frame,
 	displayedWord []rune,
 	attempts int,
 	lettersUsed map[rune]struct{},
 ) {
-	gc.write("----------------------------------------------------------------------------------------", 2)
-	gc.writef(1, "Категория: %s", category)
-	gc.writef(2, "Уровень сложности: %s", difficulty)
+	gc.write(border, 2)
+	gc.writef(1, categoryForm, category)
+	gc.writef(2, difficultyForm, difficulty)
 	gc.writeFrame(fr, 2)
 	gc.writeLettersUsed(lettersUsed, 1)
-	gc.writef(1, "Доступно попыток: %v", attempts)
+	gc.writef(1, attemptsForm, attempts)
 	gc.writeDisplayedWord(displayedWord, 2)
 	gc.flush()
 }
 
 // PlayAnimation проигрывает анимацию.
-func (gc *GameConsole) PlayAnimation(frs []frames.Frame, msDelay int) {
+func (gc *GameConsole) PlayAnimation(frs []frame.Frame, msDelay int) {
 	for _, fr := range frs {
 		gc.writeFrame(fr, 3)
 		gc.flush()
@@ -102,86 +117,89 @@ func (gc *GameConsole) PlayAnimation(frs []frames.Frame, msDelay int) {
 }
 
 // chooseCategory отображает категории и возвращает выбор.
-func (gc *GameConsole) chooseCategory(cts conditions.Categories, randomSelectionCommand string) (string, error) {
-	gc.displayConditions(cts)
-	return gc.enterCondition(cts, randomSelectionCommand)
-}
+func (gc *GameConsole) chooseCategory(cts categories.Categories, randomSelectionCommand string) (string, error) {
+	gc.write(categoryInputMessage, 0)
 
-// chooseCategory() отображает уровни сложности и возвращает выбор.
-func (gc *GameConsole) chooseDifficulty(dfs conditions.Difficulties, randomSelectionCommand string) (string, error) {
-	gc.displayConditions(dfs)
+	for ct := range cts {
+		gc.write(" "+ct, 0)
+	}
 
-	condition, err := gc.enterCondition(dfs, randomSelectionCommand)
+	gc.write("", 1)
+	gc.flush()
+
+	condition, err := gc.enterCategory(cts, randomSelectionCommand)
 	if err != nil {
-		return "", fmt.Errorf("can`t enter condition: %w", err)
+		return "", fmt.Errorf("can`t enter category: %w", err)
 	}
 
 	return condition, err
 }
 
-// displayConditions отображает доступные условия.
-func (gc *GameConsole) displayConditions(conds any) {
-	switch cs := conds.(type) {
-	case conditions.Categories:
-		gc.write("Выберите категорию (пропустите для случайного выбора):", 0)
+// chooseCategory() отображает уровни сложности и возвращает выбор.
+func (gc *GameConsole) chooseDifficulty(dfs conditions.Difficulties, randomSelectionCommand string) (string, error) {
+	gc.write(difficultyInputMessage, 0)
 
-		for cond := range cs {
-			gc.write(" "+cond, 0)
-		}
-
-		gc.write("", 1)
-		gc.flush()
-	case conditions.Difficulties:
-		gc.write("Выберите уровень сложности (пропустите для случайного выбора):", 0)
-
-		for cond := range cs {
-			gc.write(" "+cond, 0)
-		}
-
-		gc.write("", 1)
-		gc.flush()
+	for df := range dfs {
+		gc.write(" "+df, 0)
 	}
+
+	gc.write("", 1)
+	gc.flush()
+
+	condition, err := gc.enterDifficulty(dfs, randomSelectionCommand)
+	if err != nil {
+		return "", fmt.Errorf("can`t enter difficulty: %w", err)
+	}
+
+	return condition, err
 }
 
-// enterCondition принимает ввод условия и возвращает его.
-func (gc *GameConsole) enterCondition(conds any, randomSelectionCommand string) (string, error) {
+// enterCategory принимает ввод категории и возвращает её.
+func (gc *GameConsole) enterCategory(cts categories.Categories, randomSelectionCommand string) (string, error) {
 	var (
-		desiredCondition string
-		err              error
+		category string
+		err      error
 	)
 
-	switch cds := conds.(type) {
-	case conditions.Categories:
-		for {
-			desiredCondition, err = gc.readLine()
-			if err != nil {
-				return "", fmt.Errorf("can`t read category: %w", err)
-			}
-
-			_, ok := cds[desiredCondition]
-			if ok || desiredCondition == randomSelectionCommand {
-				break
-			}
-
-			gc.print("Категории не существует. Пожалуйста, выберите одну из представленных категорий", 1)
+	for {
+		category, err = gc.readLine()
+		if err != nil {
+			return "", fmt.Errorf("can`t read category: %w", err)
 		}
-	case conditions.Difficulties:
-		for {
-			desiredCondition, err = gc.readLine()
-			if err != nil {
-				return "", fmt.Errorf("can`t read difficulty: %w", err)
-			}
 
-			_, ok := cds[desiredCondition]
-			if ok || desiredCondition == randomSelectionCommand {
-				break
-			}
-
-			gc.print("Уровня сложности не существует. Пожалуйста, выберите один из представленных уровней сложности", 1)
+		_, ok := cts[category]
+		if ok || category == randomSelectionCommand {
+			break
 		}
+
+		gc.print(invalidCategoryMessage, 1)
 	}
 
-	return desiredCondition, nil
+	return category, nil
+}
+
+// enterDifficulty принимает ввод сложности и возвращает его.
+func (gc *GameConsole) enterDifficulty(dfs conditions.Difficulties, randomSelectionCommand string) (string, error) {
+	var (
+		difficulty string
+		err        error
+	)
+
+	for {
+		difficulty, err = gc.readLine()
+		if err != nil {
+			return "", fmt.Errorf("can`t read difficulty: %w", err)
+		}
+
+		_, ok := dfs[difficulty]
+		if ok || difficulty == randomSelectionCommand {
+			break
+		}
+
+		gc.print(invalidDifficultyMessage, 1)
+	}
+
+	return difficulty, nil
 }
 
 // readLine читает строки без учёта регистра.
@@ -231,7 +249,7 @@ func (gc *GameConsole) printf(indents int, format string, a ...any) {
 }
 
 // writeFrame пишет линии кадра fr в gc.writer.
-func (gc *GameConsole) writeFrame(fr frames.Frame, indents int) {
+func (gc *GameConsole) writeFrame(fr frame.Frame, indents int) {
 	for _, line := range fr {
 		gc.write(line, 1)
 	}
@@ -241,7 +259,7 @@ func (gc *GameConsole) writeFrame(fr frames.Frame, indents int) {
 
 // writeLettersUsed пишет использованные буквы gc.writer.
 func (gc *GameConsole) writeLettersUsed(lettersUsed map[rune]struct{}, indents int) {
-	gc.write("Использованные буквы:", 0)
+	gc.write(lettersUsedMessage, 0)
 
 	for letter := range lettersUsed {
 		gc.write(" "+string(letter), 0)

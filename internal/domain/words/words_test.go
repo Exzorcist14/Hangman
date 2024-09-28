@@ -32,7 +32,7 @@ func TestGetRandomWordData(t *testing.T) {
 	}
 
 	for _, tc := range tt {
-		ws := words.NewWords()
+		ws := make(words.Words)
 
 		err := loader.LoadDataFromFile("../../infrastructure/files/words.json", &ws)
 		assert.NoError(t, err)

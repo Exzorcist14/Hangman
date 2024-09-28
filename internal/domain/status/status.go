@@ -1,4 +1,4 @@
-package answer
+package status
 
 // Status хранит отображаемое слово и количество отгаданных букв.
 type Status struct {
@@ -6,8 +6,8 @@ type Status struct {
 	guessedLetters int
 }
 
-// NewStatus инициализирует текущее состояние ответа на основе загаданного слова.
-func NewStatus(word string) Status {
+// New инициализирует текущее состояние ответа на основе загаданного слова.
+func New(word string) Status {
 	as := Status{guessedLetters: 0}
 
 	as.DisplayedWord = make([]rune, len([]rune(word)))

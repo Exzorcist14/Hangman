@@ -7,10 +7,6 @@ import (
 // Words - cловарь, сопоставляющий категории и сложности слайс данных о слове.
 type Words map[string]map[string][]WordData
 
-func NewWords() Words {
-	return make(Words)
-}
-
 // GetRandomWordData возвращает случайное слово из словаря.
 func (ws Words) GetRandomWordData(category, difficulty string) WordData {
 	randIndex := random.RandInt(len(ws[category][difficulty]))

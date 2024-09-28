@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b6ad30c7-e582-4ee3-b7c5-49edbbc2b9ac" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/internal/domain/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/hangman/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/hangman/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/answer/answer.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/answer/answer.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/answer/status.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/status/status.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/conditions/categories.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/conditions/categories/categories.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/conditions/difficulties.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/conditions/difficulties.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/frames/frame.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/frames/frame/frame.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/frames/stageFramesMap.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/frames/stageFramesMap/stageFramesMap.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/frames/storyBoard.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/view/storyBoard/storyBoard.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/game/game.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/application/game/game.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/game/session.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/session/session.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/interfaces/console.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/words/words.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/words/words.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/domain/words/words_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain/words/words_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/infrastructure/console/console.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/infrastructure/gameConsole/gameConsole.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/infrastructure/files/difficulties.json" beforeDir="false" afterPath="$PROJECT_DIR$/internal/infrastructure/files/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/infrastructure/files/randomSelectionCommand.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.6.windows-amd64" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/internal/domain/answer/answer.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/conditions/categories.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/frames/stageFramesMap.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/frames/storyBoard.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/game/game.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/game/session.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/interfaces/console.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/words/word.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/words/words.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/domain/words/words_test.go" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/internal/infrastructure/console/console.go" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2mF53Hy5dlqiq02cDtwUojm8H7V" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultGoTemplateProperty": "Go File",
+    "Go Build.go build github.com/es-debug/backend-academy-2024-go-template.executor": "Run",
+    "Go Build.go build github.com/es-debug/backend-academy-2024-go-template/cmd/hangman.executor": "Run",
+    "Go Build.go build github.com/es-debug/backend-academy-2024-go-template/cmd/run.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "C:/Users/vova_/GolandProjects/backend-academy_2024_project_1-go-Exzorcist14/internal/infrastructure/files",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\infrastructure\files" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\domain\conditions\categories" />
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\view\storyBoard" />
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\view" />
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\domain\frames\frame" />
+      <recent name="C:\Users\vova_\GolandProjects\backend-academy_2024_project_1-go-Exzorcist14\internal\domain\frames\stageFramesMap" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Go Build.go build github.com/es-debug/backend-academy-2024-go-template/cmd/hangman">
+    <configuration name="go build github.com/es-debug/backend-academy-2024-go-template" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+      <module name="backend-academy_2024_project_1-go-Exzorcist14" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/es-debug/backend-academy-2024-go-template" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build github.com/es-debug/backend-academy-2024-go-template/cmd/hangman" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="backend-academy_2024_project_1-go-Exzorcist14" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="github.com/es-debug/backend-academy-2024-go-template/cmd/hangman" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/cmd/run/main.go" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Build.go build github.com/es-debug/backend-academy-2024-go-template" />
+      <item itemvalue="Go Build.go build github.com/es-debug/backend-academy-2024-go-template/cmd/hangman" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build github.com/es-debug/backend-academy-2024-go-template/cmd/hangman" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-33c477a475b1-b97fc8a1e17c-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-241.14494.238" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-GO-241.14494.238" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>

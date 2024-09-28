@@ -1,27 +1,48 @@
-package game
+package session
 
 import (
 	"fmt"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/answer"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/interfaces"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions/categories"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/stageFramesMap"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/random"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/status"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/words"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/view/storyBoard"
 )
 
 type Session struct {
-	console      interfaces.Console
-	answer       answer.Answer
-	answerStatus answer.Status
-	maxAttmeps   int
-	attempts     int
-	storyBoard   frames.StageFramesMap
-	lettersUsed  map[rune]struct{}
+	console     console
+	answer      answer.Answer
+	status      status.Status
+	maxAttmeps  int
+	storyBoard  stageFramesMap.StageFramesMap
+	lettersUsed map[rune]struct{}
 }
 
-func NewSession(console interfaces.Console) Session {
+// Console описывает интерфейс консоли.
+type console interface {
+	ChooseConditions(
+		categories categories.Categories,
+		dfs conditions.Difficulties,
+		randomSelectionCommand string,
+	) (category, difficulty string, err error)
+	Enter() (letter rune, err error)
+	DisplayHint(hint string)
+	DisplaySessionStatus(
+		category, difficulty string,
+		fr frame.Frame,
+		displayedWord []rune,
+		attempts int,
+		lettersUsed map[rune]struct{},
+	)
+	PlayAnimation(frs []frame.Frame, msDelay int)
+}
+
+func New(console console) Session {
 	return Session{
 		console:     console,
 		lettersUsed: make(map[rune]struct{}),
@@ -32,25 +53,28 @@ func NewSession(console interfaces.Console) Session {
 func (s *Session) Play(
 	ws words.Words,
 	dfs conditions.Difficulties,
-	sfm frames.StageFramesMap,
 	randomSelectionCommand string,
+	msFrameDelay int,
+	sfm stageFramesMap.StageFramesMap,
 ) error {
-	err := s.configure(ws, dfs, sfm, randomSelectionCommand)
+	err := s.configure(ws, dfs, randomSelectionCommand, sfm)
 	if err != nil {
 		return fmt.Errorf("can`t configure session: %w", err)
 	}
 
-	for !s.answerStatus.IsGuessed() && s.attempts != 0 {
-		err = s.playRound()
+	attempts := s.maxAttmeps
+
+	for !s.status.IsGuessed() && attempts != 0 {
+		attempts, err = s.playRound(attempts)
 		if err != nil {
 			return fmt.Errorf("can`t play round: %w", err)
 		}
 	}
 
-	if s.answerStatus.IsGuessed() {
-		s.console.PlayAnimation(s.storyBoard["victory"], 1250)
+	if s.status.IsGuessed() {
+		s.console.PlayAnimation(s.storyBoard["victory"], msFrameDelay)
 	} else {
-		s.console.PlayAnimation(s.storyBoard["defeat"], 1250)
+		s.console.PlayAnimation(s.storyBoard["defeat"], msFrameDelay)
 	}
 
 	return nil
@@ -60,10 +84,10 @@ func (s *Session) Play(
 func (s *Session) configure(
 	ws words.Words,
 	dfs conditions.Difficulties,
-	sfm frames.StageFramesMap,
 	randomSelectionCommand string,
+	sfm stageFramesMap.StageFramesMap,
 ) error {
-	categories := conditions.NewCategories(ws)
+	categories := categories.New(ws)
 
 	category, difficulty, err := s.console.ChooseConditions(categories, dfs, randomSelectionCommand)
 	if err != nil {
@@ -81,24 +105,23 @@ func (s *Session) configure(
 	wordData := ws.GetRandomWordData(category, difficulty)
 
 	s.maxAttmeps = dfs[difficulty]
-	s.attempts = s.maxAttmeps
-	s.answer = answer.NewAnswer(wordData, category, difficulty)
-	s.answerStatus = answer.NewStatus(wordData.Word)
-	s.storyBoard = frames.CreateStoryBoard(sfm, s.attempts)
+	s.answer = answer.New(wordData, category, difficulty)
+	s.status = status.New(wordData.Word)
+	s.storyBoard = storyBoard.CreateStoryBoard(sfm, s.maxAttmeps)
 
 	return nil
 }
 
 // Play запускает проигрывание раунда.
-func (s *Session) playRound() error {
-	frame := s.storyBoard["process"][s.maxAttmeps-s.attempts]
+func (s *Session) playRound(attempts int) (int, error) {
+	frame := s.storyBoard["process"][s.maxAttmeps-attempts]
 
 	s.console.DisplaySessionStatus(
 		s.answer.Category,
 		s.answer.Difficulty,
 		frame,
-		s.answerStatus.DisplayedWord,
-		s.attempts,
+		s.status.DisplayedWord,
+		attempts,
 		s.lettersUsed,
 	)
 
@@ -110,7 +133,7 @@ func (s *Session) playRound() error {
 	for {
 		letter, err = s.console.Enter()
 		if err != nil {
-			return fmt.Errorf("can`t enter letter: %w", err)
+			return 0, fmt.Errorf("can`t enter letter: %w", err)
 		}
 
 		if letter == '?' {
@@ -121,15 +144,15 @@ func (s *Session) playRound() error {
 	}
 
 	positions := s.answer.GetLetterPositions(letter)
-	s.answerStatus.ShowLetters(letter, positions)
+	s.status.ShowLetters(letter, positions)
 
 	if len(positions) == 0 {
-		s.attempts--
+		attempts--
 	}
 
 	s.updateLettersUsed(letter)
 
-	return nil
+	return attempts, nil
 }
 
 // updateLettersUsed обновляет список использованных букв, внося переданную букву.
@@ -138,7 +161,7 @@ func (s *Session) updateLettersUsed(letter rune) {
 }
 
 // getRandomCategory возвращает случайную категорию.
-func getRandomCategory(cts conditions.Categories) string {
+func getRandomCategory(cts categories.Categories) string {
 	return getRandomCondition(cts)
 }
 
@@ -148,34 +171,19 @@ func getRandomDifficulty(dfs conditions.Difficulties) string {
 }
 
 // getRandomDifficulty возвращает случайное условие.
-func getRandomCondition(conds any) string {
+func getRandomCondition[T any](conds map[string]T) string {
 	var condition string
 
-	switch cds := conds.(type) {
-	case conditions.Categories:
-		randIndex := random.RandInt(len(cds))
+	randIndex := random.RandInt(len(conds))
+	i := 0
 
-		i := 0
-		for ct := range cds {
-			if i == randIndex {
-				condition = ct
-				break
-			}
-
-			i++
+	for cond := range conds {
+		if i == randIndex {
+			condition = cond
+			break
 		}
-	case conditions.Difficulties:
-		randIndex := random.RandInt(len(cds))
 
-		i := 0
-		for df := range cds {
-			if i == randIndex {
-				condition = df
-				break
-			}
-
-			i++
-		}
+		i++
 	}
 
 	return condition
