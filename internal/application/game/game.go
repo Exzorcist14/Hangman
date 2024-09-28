@@ -4,17 +4,17 @@ import (
 	"fmt"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/config"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/stageFramesMap"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/session"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/words"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/infrastructure/gameConsole"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/infrastructure/console"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/infrastructure/loader"
 )
 
 type Game struct {
 	config         config.Config
 	words          words.Words
-	stageFramesMap stageFramesMap.StageFramesMap
+	stageFramesMap frames.StageFramesMap
 	session        session.Session
 }
 
@@ -29,7 +29,7 @@ func (g *Game) Run() error {
 		return fmt.Errorf("can`t load session data: %w", err)
 	}
 
-	g.session = session.New(gameConsole.New())
+	g.session = session.New(console.New())
 
 	err = g.session.Play(g.words, g.config.Difficulties, g.config.RandomSelectionCommand, g.config.MsFrameDelay, g.stageFramesMap)
 	if err != nil {
@@ -55,7 +55,7 @@ func (g *Game) loadGameData() error {
 		return fmt.Errorf("can`t load words from file: %w", err)
 	}
 
-	g.stageFramesMap = stageFramesMap.New(g.config.FramesInAnimation)
+	g.stageFramesMap = frames.New(g.config.FramesInAnimation)
 
 	err = loader.LoadDataFromFile("./internal/infrastructure/files/frames.json", &g.stageFramesMap)
 	if err != nil {

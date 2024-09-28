@@ -1,32 +1,31 @@
-package storyBoard
+package storyboard
 
 import (
-	frame2 "github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/stageFramesMap"
 	"math"
 
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/random"
 )
 
-// CreateStoryBoard создаёт раскадровку типа StageFramesMap по входному набору кадров и количеству попыток.
-func CreateStoryBoard(sfp stageFramesMap.StageFramesMap, attempts int) stageFramesMap.StageFramesMap {
-	storyBoard := stageFramesMap.New(len(sfp["victory"]))
-	copy(storyBoard["defeat"], sfp["defeat"])   // кадры анимации поражения соответствуют предусмотренному набору кадров
-	copy(storyBoard["victory"], sfp["victory"]) // кадры анимации победы соответствуют предусмотренному набору кадров
+// CreateStoryboard создаёт раскадровку типа StageFramesMap по входному набору кадров и количеству попыток.
+func CreateStoryboard(sfp frames.StageFramesMap, attempts int) frames.StageFramesMap {
+	storyboard := frames.New(len(sfp["victory"]))
+	copy(storyboard["defeat"], sfp["defeat"])   // кадры анимации поражения соответствуют предусмотренному набору кадров
+	copy(storyboard["victory"], sfp["victory"]) // кадры анимации победы соответствуют предусмотренному набору кадров
 
 	frameIndexes := generateFrameIndexes(sfp, attempts)
 	for _, frameIndex := range frameIndexes {
-		frame := make(frame2.Frame, len(sfp["process"][frameIndex]))
+		frame := make(frames.Frame, len(sfp["process"][frameIndex]))
 		copy(frame, sfp["process"][frameIndex])
 
-		storyBoard["process"] = append(storyBoard["process"], frame)
+		storyboard["process"] = append(storyboard["process"], frame)
 	}
 
-	return storyBoard
+	return storyboard
 }
 
 // generateFrameIndexes генерирует номера кадров из исходного набора, которые будут включены в раскадровку.
-func generateFrameIndexes(frs stageFramesMap.StageFramesMap, attempts int) []int {
+func generateFrameIndexes(frs frames.StageFramesMap, attempts int) []int {
 	// Выберем кадры для каждой новой попытки
 	framesNumber := len(frs["process"]) // количество кадров в изначальном наборе
 	segmentsNumber := attempts          // количество кадров, необходимое для соответствия каждой новой попытке

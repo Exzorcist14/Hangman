@@ -1,17 +1,13 @@
-package stageFramesMap
-
-import (
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
-)
+package frames
 
 // StageFramesMap - словарь, хранящий этапы игры и соответствующий им слайс кадров.
-type StageFramesMap map[string][]frame.Frame
+type StageFramesMap map[string][]Frame
 
 // NewStageFramesMap возвращает инициализированный StageFramesMap, задавая этапам победы и поражения указанный размер кадра.
 func New(size int) StageFramesMap {
 	sfp := make(StageFramesMap)
-	sfp["victory"] = make([]frame.Frame, size)
-	sfp["defeat"] = make([]frame.Frame, size)
+	sfp["victory"] = make([]Frame, size)
+	sfp["defeat"] = make([]Frame, size)
 
 	return sfp
 }

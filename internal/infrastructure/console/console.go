@@ -1,16 +1,15 @@
-package gameConsole
+package console
 
 import (
 	"bufio"
 	"fmt"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 	"os"
 	"strings"
 	"time"
 	"unicode"
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions/categories"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
 )
 
 const (
@@ -42,7 +41,7 @@ func New() *GameConsole {
 
 // ChooseConditions возвращает категорию и уровня сложности.
 func (gc *GameConsole) ChooseConditions(
-	cts categories.Categories,
+	cts conditions.Categories,
 	dfs conditions.Difficulties,
 	randomSelectionCommand string,
 ) (category, difficulty string, err error) {
@@ -92,7 +91,7 @@ func (gc *GameConsole) DisplayHint(hint string) {
 // DisplaySessionStatus выводит статус сессии.
 func (gc *GameConsole) DisplaySessionStatus(
 	category, difficulty string,
-	fr frame.Frame,
+	fr frames.Frame,
 	displayedWord []rune,
 	attempts int,
 	lettersUsed map[rune]struct{},
@@ -108,7 +107,7 @@ func (gc *GameConsole) DisplaySessionStatus(
 }
 
 // PlayAnimation проигрывает анимацию.
-func (gc *GameConsole) PlayAnimation(frs []frame.Frame, msDelay int) {
+func (gc *GameConsole) PlayAnimation(frs []frames.Frame, msDelay int) {
 	for _, fr := range frs {
 		gc.writeFrame(fr, 3)
 		gc.flush()
@@ -117,7 +116,7 @@ func (gc *GameConsole) PlayAnimation(frs []frame.Frame, msDelay int) {
 }
 
 // chooseCategory отображает категории и возвращает выбор.
-func (gc *GameConsole) chooseCategory(cts categories.Categories, randomSelectionCommand string) (string, error) {
+func (gc *GameConsole) chooseCategory(cts conditions.Categories, randomSelectionCommand string) (string, error) {
 	gc.write(categoryInputMessage, 0)
 
 	for ct := range cts {
@@ -155,7 +154,7 @@ func (gc *GameConsole) chooseDifficulty(dfs conditions.Difficulties, randomSelec
 }
 
 // enterCategory принимает ввод категории и возвращает её.
-func (gc *GameConsole) enterCategory(cts categories.Categories, randomSelectionCommand string) (string, error) {
+func (gc *GameConsole) enterCategory(cts conditions.Categories, randomSelectionCommand string) (string, error) {
 	var (
 		category string
 		err      error
@@ -249,7 +248,7 @@ func (gc *GameConsole) printf(indents int, format string, a ...any) {
 }
 
 // writeFrame пишет линии кадра fr в gc.writer.
-func (gc *GameConsole) writeFrame(fr frame.Frame, indents int) {
+func (gc *GameConsole) writeFrame(fr frames.Frame, indents int) {
 	for _, line := range fr {
 		gc.write(line, 1)
 	}

@@ -5,13 +5,11 @@ import (
 
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/answer"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/conditions/categories"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/frame"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames/stageFramesMap"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/frames"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/random"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/status"
 	"github.com/es-debug/backend-academy-2024-go-template/internal/domain/words"
-	"github.com/es-debug/backend-academy-2024-go-template/internal/view/storyBoard"
+	"github.com/es-debug/backend-academy-2024-go-template/internal/view/storyboard"
 )
 
 type Session struct {
@@ -19,14 +17,14 @@ type Session struct {
 	answer      answer.Answer
 	status      status.Status
 	maxAttmeps  int
-	storyBoard  stageFramesMap.StageFramesMap
+	storyboard  frames.StageFramesMap
 	lettersUsed map[rune]struct{}
 }
 
 // Console описывает интерфейс консоли.
 type console interface {
 	ChooseConditions(
-		categories categories.Categories,
+		categories conditions.Categories,
 		dfs conditions.Difficulties,
 		randomSelectionCommand string,
 	) (category, difficulty string, err error)
@@ -34,12 +32,12 @@ type console interface {
 	DisplayHint(hint string)
 	DisplaySessionStatus(
 		category, difficulty string,
-		fr frame.Frame,
+		fr frames.Frame,
 		displayedWord []rune,
 		attempts int,
 		lettersUsed map[rune]struct{},
 	)
-	PlayAnimation(frs []frame.Frame, msDelay int)
+	PlayAnimation(frs []frames.Frame, msDelay int)
 }
 
 func New(console console) Session {
@@ -55,7 +53,7 @@ func (s *Session) Play(
 	dfs conditions.Difficulties,
 	randomSelectionCommand string,
 	msFrameDelay int,
-	sfm stageFramesMap.StageFramesMap,
+	sfm frames.StageFramesMap,
 ) error {
 	err := s.configure(ws, dfs, randomSelectionCommand, sfm)
 	if err != nil {
@@ -72,9 +70,9 @@ func (s *Session) Play(
 	}
 
 	if s.status.IsGuessed() {
-		s.console.PlayAnimation(s.storyBoard["victory"], msFrameDelay)
+		s.console.PlayAnimation(s.storyboard["victory"], msFrameDelay)
 	} else {
-		s.console.PlayAnimation(s.storyBoard["defeat"], msFrameDelay)
+		s.console.PlayAnimation(s.storyboard["defeat"], msFrameDelay)
 	}
 
 	return nil
@@ -85,17 +83,17 @@ func (s *Session) configure(
 	ws words.Words,
 	dfs conditions.Difficulties,
 	randomSelectionCommand string,
-	sfm stageFramesMap.StageFramesMap,
+	sfm frames.StageFramesMap,
 ) error {
-	categories := categories.New(ws)
+	cts := conditions.New(ws)
 
-	category, difficulty, err := s.console.ChooseConditions(categories, dfs, randomSelectionCommand)
+	category, difficulty, err := s.console.ChooseConditions(cts, dfs, randomSelectionCommand)
 	if err != nil {
 		return fmt.Errorf("can`t choose conditions: %w", err)
 	}
 
 	if category == randomSelectionCommand {
-		category = getRandomCategory(categories)
+		category = getRandomCategory(cts)
 	}
 
 	if difficulty == randomSelectionCommand {
@@ -107,14 +105,14 @@ func (s *Session) configure(
 	s.maxAttmeps = dfs[difficulty]
 	s.answer = answer.New(wordData, category, difficulty)
 	s.status = status.New(wordData.Word)
-	s.storyBoard = storyBoard.CreateStoryBoard(sfm, s.maxAttmeps)
+	s.storyboard = storyboard.CreateStoryboard(sfm, s.maxAttmeps)
 
 	return nil
 }
 
 // Play запускает проигрывание раунда.
 func (s *Session) playRound(attempts int) (int, error) {
-	frame := s.storyBoard["process"][s.maxAttmeps-attempts]
+	frame := s.storyboard["process"][s.maxAttmeps-attempts]
 
 	s.console.DisplaySessionStatus(
 		s.answer.Category,
@@ -161,7 +159,7 @@ func (s *Session) updateLettersUsed(letter rune) {
 }
 
 // getRandomCategory возвращает случайную категорию.
-func getRandomCategory(cts categories.Categories) string {
+func getRandomCategory(cts conditions.Categories) string {
 	return getRandomCondition(cts)
 }
 

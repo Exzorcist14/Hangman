@@ -9,7 +9,7 @@ type Config struct {
 	MsFrameDelay           int
 }
 
-// New возвращает инициализированный Config с предустановленными настройками по-умолчанию
+// New возвращает инициализированный Config с предустановленными настройками по-умолчанию.
 func New() Config {
 	return Config{
 		Difficulties: conditions.Difficulties{
