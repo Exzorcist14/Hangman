@@ -32,6 +32,7 @@ type GameConsole struct {
 	writer bufio.Writer
 }
 
+// New возвращает указатель на инициализированную структуру GameConsole, использующую стандарнтые потоки ввода-вывода.
 func New() *GameConsole {
 	return &GameConsole{
 		reader: *bufio.NewReader(os.Stdin),

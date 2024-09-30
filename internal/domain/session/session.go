@@ -12,6 +12,8 @@ import (
 	"github.com/es-debug/backend-academy-2024-go-template/internal/view/storyboard"
 )
 
+// Session хранит ответ, текущее состояние ответа, максимальное количество попыток, раскадровку,
+// множество использованных букв и использует интерфейс console.
 type Session struct {
 	console     console
 	answer      answer.Answer
@@ -21,7 +23,7 @@ type Session struct {
 	lettersUsed map[rune]struct{}
 }
 
-// Console описывает интерфейс консоли.
+// console описывает интерфейс консоли.
 type console interface {
 	ChooseConditions(
 		categories conditions.Categories,
@@ -40,6 +42,7 @@ type console interface {
 	PlayAnimation(frs []frames.Frame, msDelay int)
 }
 
+// New возвращает инициализированную структуру Session с переданной консолью и пустым множеством использованных букв.
 func New(console console) Session {
 	return Session{
 		console:     console,
@@ -85,7 +88,7 @@ func (s *Session) configure(
 	randomSelectionCommand string,
 	sfm frames.StageFramesMap,
 ) error {
-	cts := conditions.New(ws)
+	cts := conditions.NewCategories(ws)
 
 	category, difficulty, err := s.console.ChooseConditions(cts, dfs, randomSelectionCommand)
 	if err != nil {

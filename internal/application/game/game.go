@@ -11,6 +11,7 @@ import (
 	"github.com/es-debug/backend-academy-2024-go-template/internal/infrastructure/loader"
 )
 
+// Game хранит конфиг, словарь, кадры и сессию.
 type Game struct {
 	config         config.Config
 	words          words.Words
@@ -18,6 +19,7 @@ type Game struct {
 	session        session.Session
 }
 
+// New возвращает инициализированную структуру Game.
 func New() Game {
 	return Game{}
 }

@@ -5,8 +5,8 @@ import "github.com/es-debug/backend-academy-2024-go-template/internal/domain/wor
 // Categories - множество категорий.
 type Categories map[string]struct{}
 
-// New инициализирует Categories по переданному словарю игры.
-func New(ws words.Words) Categories {
+// NewCategories инициализирует Categories по переданному словарю игры.
+func NewCategories(ws words.Words) Categories {
 	categories := make(map[string]struct{})
 
 	for ct := range ws {
