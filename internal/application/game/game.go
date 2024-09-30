@@ -19,21 +19,23 @@ type Game struct {
 	session        session.Session
 }
 
-// New возвращает структуру Game со значениями полей по-умолчанию (по типу) для последующего заполнения данными.
-func New() Game {
-	return Game{}
+// New возвращает инициализированную структуру Game.
+func New() (Game, error) {
+	g := Game{}
+
+	err := g.loadGameData()
+	if err != nil {
+		return g, fmt.Errorf("can`t load game data: %w", err)
+	}
+
+	return g, nil
 }
 
 // Run запускает игру.
 func (g *Game) Run() error {
-	err := g.loadGameData()
-	if err != nil {
-		return fmt.Errorf("can`t load session data: %w", err)
-	}
-
 	g.session = session.New(console.New())
 
-	err = g.session.Play(g.words, g.config.Difficulties, g.config.RandomSelectionCommand, g.config.MsFrameDelay, g.stageFramesMap)
+	err := g.session.Play(g.words, g.config.Difficulties, g.config.RandomSelectionCommand, g.config.MsFrameDelay, g.stageFramesMap)
 	if err != nil {
 		return fmt.Errorf("can`t play session: %w", err)
 	}

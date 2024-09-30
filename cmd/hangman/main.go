@@ -7,9 +7,12 @@ import (
 )
 
 func main() {
-	g := game.New()
+	g, err := game.New()
+	if err != nil {
+		os.Exit(1)
+	}
 
-	err := g.Run()
+	err = g.Run()
 	if err != nil {
 		os.Exit(1)
 	}
