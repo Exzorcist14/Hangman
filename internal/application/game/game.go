@@ -19,7 +19,7 @@ type Game struct {
 	session        session.Session
 }
 
-// New возвращает инициализированную структуру Game.
+// New возвращает структуру Game со значениями полей по-умолчанию (по типу) для последующего заполнения данными.
 func New() Game {
 	return Game{}
 }
